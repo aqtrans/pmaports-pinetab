@@ -1,7 +1,7 @@
 # Maintainer: Martijn Braam <martijn@brixit.nl>
 pkgname=crust
 pkgver=0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="SCP firmware for sunxi SoCs"
 arch="aarch64"
 url="https://github.com/crust-firmware/crust"
@@ -14,11 +14,15 @@ options="!check !archcheck !tracedeps pmb:cross-native" # No tests
 
 build() {
 	make CROSS_COMPILE=or1k-elf- pinephone_defconfig
-	make CROSS_COMPILE=or1k-elf- build/scp/scp.bin
+	make CROSS_COMPILE=or1k-elf- build/scp/scp-pinephone.bin
+
+	make CROSS_COMPILE=or1k-elf- pinetab_defconfig
+	make CROSS_COMPILE=or1k-elf- build/scp/scp-pinetab.bin
 }
 
 package() {
-	install -D -m644 build/scp/scp.bin "$pkgdir"/usr/share/crust/pinephone/scp.bin
+	install -D -m644 build/scp/scp-pinephone.bin "$pkgdir"/usr/share/crust/pinephone/scp.bin
+	install -D -m644 build/scp/scp-pinetab.bin "$pkgdir"/usr/share/crust/pinetab/scp.bin
 }
 sha512sums="
 1a3811053fd3a27285a1377888ab5b36e9363a2f5818f69966eb7f5214e571475a2a7865b9e1b68387940a9a7e9dc3841d2458544c155aecc5b9da041eb946ba  crust-v0.5.tar.gz
